@@ -118,7 +118,7 @@ def student_register(request):
 
 def personal_details(request):
     data = StudentRegister.objects.all()
-    print(data)
+
     return render(request,"student/personal details.html",{'data':data})
 
 def edit_personal_details(request, id):

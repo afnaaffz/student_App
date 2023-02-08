@@ -1,6 +1,8 @@
+import self as self
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import DateInput
+from django.forms.utils import ErrorList
 
 from student_app.models import Login, StudentRegister, AdminRegister, Mark
 
@@ -15,11 +17,18 @@ class Login_Form(UserCreationForm):
 
 class StudentRegisterForm(forms.ModelForm):
     dob = forms.DateField(widget=DateInput)
-
     class Meta:
         model = StudentRegister
         fields = '__all__'
         exclude = 'user',
+
+
+
+    def clean(self):
+        image = self.cleaned_data.get('profile_pic')
+          # 5MB - 5242880
+        if image.size > 50000:
+             self._errors["image"] = ErrorList([u"Image too heavy."])
 
 class AdminRegisterForm(forms.ModelForm):
     dob = forms.DateField(widget=DateInput)
