@@ -116,9 +116,16 @@ def student_register(request):
     return render(request,"student/student_register.html",{'form1':form1,'form2':form2})
 
 
+# def validate_file_size(value):
+#     filesize = value.size
+#
+#     if filesize > 10485760:
+#         raise ValidationError("The maximum file size that can be uploaded is 10MB")
+#     else:
+#         return value
+
 def personal_details(request):
     data = StudentRegister.objects.all()
-
     return render(request,"student/personal details.html",{'data':data})
 
 def edit_personal_details(request, id):

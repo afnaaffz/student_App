@@ -1,6 +1,7 @@
 import self as self
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 from django.forms import DateInput
 from django.forms.utils import ErrorList
 
@@ -22,13 +23,18 @@ class StudentRegisterForm(forms.ModelForm):
         fields = '__all__'
         exclude = 'user',
 
+    # def clean(self):
+    #     image = self.cleaned_data.get('profile_pic')
+    #     # 5MB - 5242880
+    #     if image.size > 50000:
 
-
-    def clean(self):
-        image = self.cleaned_data.get('profile_pic')
+def clean(profilepic):
+    image = profilepic.size
           # 5MB - 5242880
-        if image.size > 50000:
-             self._errors["image"] = ErrorList([u"Image too heavy."])
+    if image.size > 50000:
+        raise ValidationError("KJHGTF")
+    else:
+        return image
 
 class AdminRegisterForm(forms.ModelForm):
     dob = forms.DateField(widget=DateInput)

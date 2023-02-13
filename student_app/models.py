@@ -1,6 +1,7 @@
-from datetime import date, timedelta
+from datetime import date, datetime
 
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 
 from django.db import models
 
@@ -24,14 +25,55 @@ class StudentRegister(models.Model):
     dob = models.DateField(max_length=8)
     phone = models.CharField(max_length=10)
 
-    def age(self,dob):
-        today = date.today()
-        y = today.year - dob.year
-        if today.month < dob.month or today.month == dob.month and today.day < dob.day:
-            y -= 1
-        return y
+    def minimum_size(width=None, height=None):
+
+        def validator(image):
+            if not image.is_image():
+                raise ValidationError('File should be image.')
+
+            (errors, image_info) = ([], image.info()['image_info'])
+            if width is not None and image_info['width'] < width:
+                errors.append('Width should be > {} px.'.format(width))
+            if height is not None and image_info['height'] < height:
+                errors.append('Height should be > {} px.'.format(height))
+            raise ValidationError(errors)
+
+        return validator
+        # limit_mb = 8
+        # if file_size > limit_mb * 1024 * 1024:
+        #    raise ValidationError("Max size of file is %s MB" % limit_mb)
+
+
+
     # def __str__(self):
-    #     return self.name
+    #     return self.name + ": " + str(self.filepath)
+
+    # def age(self,dob):
+    #     today = datetime.today()
+    #     t= dob.year
+    #     y = today.year
+    #     r=y-t
+    #     # if today.month < dob.month or today.month == dob.month and today.day < dob.day:
+    #     #     r -= 1
+    #     return r
+    #
+    # # def age(self,dob):
+    # #     days_in_year = 365.2425
+    # #     age = int((date.today() - dob).days / days_in_year)
+    # #     return age
+
+    @property
+    def age(self):
+        return int((datetime.now().date() - self.dob).days /365.25)
+
+
+    # @property
+    # def age(self,dob):
+    #     days_in_year = 365.2425
+    #     age = int((datetime.now().date() - dob).days / days_in_year)
+    #     return age
+
+
 
 class AdminRegister(models.Model):
     user = models.ForeignKey(Login, on_delete=models.CASCADE)
