@@ -136,6 +136,6 @@ def edit_personal_details(request, id):
             form = StudentRegisterForm(request.POST, instance=a)
             if form.is_valid():
                 form.save()
-                return redirect("personal details")
+                return redirect("personal_details")
 
         return render(request, "student/edit_personal_details.html", {'form': form})

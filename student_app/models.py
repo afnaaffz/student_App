@@ -9,13 +9,9 @@ from django.db import models
 
 # Create your models here.
 
-
-
 class Login(AbstractUser):
     is_adm = models.BooleanField(default=False)
     is_student=models.BooleanField(default=False)
-
-
 
 
 class StudentRegister(models.Model):
@@ -39,39 +35,15 @@ class StudentRegister(models.Model):
             raise ValidationError(errors)
 
         return validator
-        # limit_mb = 8
-        # if file_size > limit_mb * 1024 * 1024:
-        #    raise ValidationError("Max size of file is %s MB" % limit_mb)
 
-
-
-    # def __str__(self):
-    #     return self.name + ": " + str(self.filepath)
-
-    # def age(self,dob):
-    #     today = datetime.today()
-    #     t= dob.year
-    #     y = today.year
-    #     r=y-t
-    #     # if today.month < dob.month or today.month == dob.month and today.day < dob.day:
-    #     #     r -= 1
-    #     return r
-    #
-    # # def age(self,dob):
-    # #     days_in_year = 365.2425
-    # #     age = int((date.today() - dob).days / days_in_year)
-    # #     return age
 
     @property
     def age(self):
         return int((datetime.now().date() - self.dob).days /365.25)
 
+    def __str__(self):
+        return self.name
 
-    # @property
-    # def age(self,dob):
-    #     days_in_year = 365.2425
-    #     age = int((datetime.now().date() - dob).days / days_in_year)
-    #     return age
 
 
 
@@ -87,3 +59,6 @@ class AdminRegister(models.Model):
 class Mark(models.Model):
     name = models.ForeignKey(StudentRegister, on_delete=models.CASCADE)
     mark = models.IntegerField()
+
+    def __str__(self):
+        return self.name
